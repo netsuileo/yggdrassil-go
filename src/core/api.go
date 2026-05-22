@@ -196,7 +196,6 @@ func (c *Core) SetLogger(log Logger) {
 // AddPeer adds a peer. This should be specified in the peer URI format, e.g.:
 //
 //	tcp://a.b.c.d:e
-//	socks://a.b.c.d:e/f.g.h.i:j
 //
 // This adds the peer to the peer list, so that they will be called again if the
 // connection drops.
@@ -214,7 +213,6 @@ func (c *Core) RemovePeer(u *url.URL, sintf string) error {
 // e.g.:
 //
 //	tcp://a.b.c.d:e
-//	socks://a.b.c.d:e/f.g.h.i:j
 //
 // This does not add the peer to the peer list, so if the connection drops, the
 // peer will not be called again automatically.

@@ -32,12 +32,11 @@ const minimumBackoffLimit = time.Second * 5
 
 type links struct {
 	phony.Inbox
-	core  *Core
-	tcp   *linkTCP   // TCP interface support
-	tls   *linkTLS   // TLS interface support
-	unix  *linkUNIX  // UNIX interface support
-	socks *linkSOCKS // SOCKS interface support
-	quic  *linkQUIC  // QUIC interface support
+	core *Core
+	tcp  *linkTCP  // TCP interface support
+	tls  *linkTLS  // TLS interface support
+	unix *linkUNIX // UNIX interface support
+	quic *linkQUIC // QUIC interface support
 	// _links can only be modified safely from within the links actor
 	_links     map[linkInfo]*link // *link is nil if connection in progress
 	_listeners map[*Listener]context.CancelFunc
@@ -90,7 +89,6 @@ func (l *links) init(c *Core) error {
 	l.tcp = l.newLinkTCP()
 	l.tls = l.newLinkTLS(l.tcp)
 	l.unix = l.newLinkUNIX()
-	l.socks = l.newLinkSOCKS()
 	l.quic = l.newLinkQUIC()
 	l._links = make(map[linkInfo]*link)
 	l._listeners = make(map[*Listener]context.CancelFunc)
@@ -600,8 +598,6 @@ func (l *links) dialerFor(u *url.URL) (linkProtocol, error) {
 		dialer = l.tcp
 	case "tls":
 		dialer = l.tls
-	case "socks", "sockstls":
-		dialer = l.socks
 	case "unix":
 		dialer = l.unix
 	case "quic":
